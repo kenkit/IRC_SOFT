@@ -74,7 +74,7 @@ std::string const LETTERS ="abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ
 void IrcConnect(std::string HOST,std::string channel )
 {
         #ifdef D_LIB
-        logircConnect << LINFO << "Has been started with void params";
+        logircConnect << LINFO << "Has been started with IrcConnect("<<HOST<<","<<channel<<")";
         #endif
 
             std::ostream request_stream(&request);
@@ -96,11 +96,18 @@ void IrcConnect(std::string HOST,std::string channel )
         logircConnect << LINFO << "Forming Request stream";
         #endif
                 boost::asio::write(socket, request);
+                #ifdef D_LIB
+                logircConnect << LDEBUG << "Sending :NICK "<<NICK;
+                #endif
                 request_stream << "NICK "<<NICK<<"\r\n";
                 boost::asio::write(socket, request);
                 request_stream << "USER guest tolmoon tolsun :"<<REALNAME<<"\r\n";
                 boost::asio::write(socket, request);
                 request_stream << "\\join "<<"#"<<channel<<"\r\n";
+
+        #ifdef D_LIB
+         logircConnect << LDEBUG << "Sending \\join "<<"#"<<channel;
+        #endif
          #ifdef D_LIB
          logircConnect << LDEBUG<<"Sending request stream";
          #endif
@@ -598,7 +605,7 @@ Verbose(5);
 logmain<<LINFO <<"Started";
 #endif // D_LIB
 
-HOST=("punch.wa.us.dal.net"),channel="#kens";
+HOST=("punch.wa.us.dal.net"),channel="kens";
 
 
 
