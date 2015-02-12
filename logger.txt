@@ -15,13 +15,13 @@
     0 INFO  [0] Stealth: Switching the display mode
     0 DEBUG [0] Stealth: Console Display mode is On
     0 INFO  [0] Compname:  :Started logging.
-    0 DEBUG [1] Threading: Started Update checker
     0 INFO  [0] Compname:  :Assigned Computer name :USER-PC
     0 INFO  [0] Compname:  :Exiting
     0 INFO  [0] main: Inside while loop
     0 INFO  [0] ircConnect: Has been started 
     0 INFO  [0] ircConnect: Params IrcConnect(punch.wa.us.dal.net,kens)
     0 DEBUG [0] ircConnect: Connecting to Host: punch.wa.us.dal.net
+    0 DEBUG [1] Threading: Started Update checker
     0 INFO  [0] ircConnect: Forming Request stream
     0 DEBUG [0] ircConnect: Sending :NICK USER-PC
     0 DEBUG [0] ircConnect: Sending \join #kens
@@ -41,15 +41,15 @@
 
     0 DEBUG [0] ircConnect: Received : 
 
-:punch.wa.us.dal.net NOTICE AUTH :*** No Ident response 
-
-    0 DEBUG [0] ircConnect: Received : 56 Bytes.
-
-    0 DEBUG [0] ircConnect: Received : 
-
 :punch.wa.us.dal.net NOTICE AUTH :*** Found your hostname 
 
     0 DEBUG [0] ircConnect: Received : 58 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE AUTH :*** No Ident response 
+
+    0 DEBUG [0] ircConnect: Received : 56 Bytes.
 
     0 DEBUG [0] ircConnect: Received : 
 
@@ -96,7 +96,7 @@ N=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:20 PREFIX=(ov)@+ S
     0 DEBUG [0] ircConnect: Sending Pong  to: punch.wa.us.dal.net
     0 DEBUG [0] ircConnect: Received : 
 
-:punch.wa.us.dal.net 251 USER-PC :There are 15 users and 9496 invisible on 39 servers 
+:punch.wa.us.dal.net 251 USER-PC :There are 15 users and 9519 invisible on 39 servers 
 
     0 DEBUG [0] ircConnect: Received : 86 Bytes.
 
@@ -120,19 +120,19 @@ N=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:20 PREFIX=(ov)@+ S
 
     0 DEBUG [0] ircConnect: Received : 
 
-:punch.wa.us.dal.net 255 USER-PC :I have 782 clients and 1 servers 
+:punch.wa.us.dal.net 255 USER-PC :I have 775 clients and 1 servers 
 
     0 DEBUG [0] ircConnect: Received : 67 Bytes.
 
     0 DEBUG [0] ircConnect: Received : 
 
-:punch.wa.us.dal.net 265 USER-PC :Current local users: 782 Max: 14910 
+:punch.wa.us.dal.net 265 USER-PC :Current local users: 775 Max: 14910 
 
     0 DEBUG [0] ircConnect: Received : 70 Bytes.
 
     0 DEBUG [0] ircConnect: Received : 
 
-:punch.wa.us.dal.net 266 USER-PC :Current global users: 9511 Max: 67731 
+:punch.wa.us.dal.net 266 USER-PC :Current global users: 9534 Max: 67731 
 
     0 DEBUG [0] ircConnect: Received : 72 Bytes.
 

@@ -696,8 +696,8 @@ string encoding = doc.first_node()->first_attribute("encoding")->value();
 
 // we didn't keep track of our previous traversal, so let's start again
 // we can match nodes by name, skipping the xml declaration entirely
-xml_node<>* cur_node = doc.first_node("rootnode");
-string rootnode_type = cur_node->first_attribute("type")->value();
+xml_node<>* cur_node = doc.first_node("current");
+string version = cur_node->first_attribute("version")->value();
 // rootnode_type == "example"
 
 // go straight to the first evendeepernode
@@ -712,8 +712,8 @@ attr2 = cur_node->first_attribute("attr2")->value();
 
 
 
-cout<< encoding<<endl;
-cout<<rootnode_type<<endl;
+//cout<< encoding<<endl;
+cout<<"Current Version : "<<version<<endl;
 cout<<attr2<<endl;
 
 return 0;
