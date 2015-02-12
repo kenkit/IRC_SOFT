@@ -14,8 +14,14 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-D_WIN32_WINNT=0x0501" />
+					<Add option="-DD_LIB" />
+					<Add option="-DDLIB_NO_GUI_SUPPORT" />
+					<Add option="-DNO_MAKEFILE" />
+					<Add option="-DENABLE_ASSERTS" />
+					<Add option="-DNO_BOOST_DATE_TIME_INLINE" />
 					<Add directory="C:/Users/User/Desktop/IRC/IRC_SOFT/Communication/" />
 					<Add directory="C:/Users/User/Desktop/boost_1_54_0" />
+					<Add directory="C:/Users/User/Desktop/dlib-18.13" />
 				</Compiler>
 				<Linker>
 					<Add library="C:\Users\User\Desktop\boost_1_54_0\bin.v2\libs\system\build\gcc-mingw-4.6.1\release\link-static\threading-multi\libboost_system-mgw46-mt-1_54.a" />
