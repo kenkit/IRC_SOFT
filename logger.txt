@@ -1,0 +1,234 @@
+    0 INFO  [0] main: Started
+    0 INFO  [0] Splitfilename: Called with :C:\Users\User\Desktop\IRC\IRC_SOFT\bin\Debug\Communication.exe Params
+    0 DEBUG [0] Splitfilename: Path is: C:\Users\User\Desktop\IRC\IRC_SOFT\bin\Debug\ Filename is :Communication.exe
+    0 INFO  [0] Filecopier: Called with :Communication.exe :Communication.exe :C:\Temp\
+    0 WARN  [0] Filecopier: ! :Communication.exe Failed to copy
+    0 INFO  [0] Filecopier: Called with :libgcc_s_dw2-1.dll :libgcc_s_dw2-1.dll :C:\Temp\
+    0 WARN  [0] Filecopier: ! :libgcc_s_dw2-1.dll Failed to copy
+    0 INFO  [0] Filecopier: Called with :libstdc++-6.dll :libstdc++-6.dll :C:\Temp\
+    0 WARN  [0] Filecopier: ! :libstdc++-6.dll Failed to copy
+    0 INFO  [0] Filecopier: Called with :wget.exe :wget.exe :C:\Temp\
+    0 WARN  [0] Filecopier: ! :wget.exe Failed to copy
+    0 INFO  [0] Filecopier: Called with :pthreadGC2.dll :pthreadGC2.dll :C:\Temp\
+    0 WARN  [0] Filecopier: ! :pthreadGC2.dll Failed to copy
+    0 INFO  [0] Stealth: Started
+    0 INFO  [0] Stealth: Switching the display mode
+    0 DEBUG [0] Stealth: Console Display mode is On
+    0 INFO  [0] Compname:  :Started logging.
+    0 DEBUG [1] Threading: Started Update checker
+    0 INFO  [0] Compname:  :Assigned Computer name :USER-PC
+    0 INFO  [0] Compname:  :Exiting
+    0 INFO  [0] main: Inside while loop
+    0 INFO  [0] ircConnect: Has been started 
+    0 INFO  [0] ircConnect: Params IrcConnect(punch.wa.us.dal.net,kens)
+    0 DEBUG [0] ircConnect: Connecting to Host: punch.wa.us.dal.net
+    0 INFO  [0] ircConnect: Forming Request stream
+    0 DEBUG [0] ircConnect: Sending :NICK USER-PC
+    0 DEBUG [0] ircConnect: Sending \join #kens
+    0 DEBUG [0] ircConnect: Sending request stream
+    0 INFO  [0] ircConnect: Receiving data from punch.wa.us.dal.net
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE AUTH :*** Looking up your hostname... 
+
+    0 DEBUG [0] ircConnect: Received : 66 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE AUTH :*** Checking Ident 
+
+    0 DEBUG [0] ircConnect: Received : 53 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE AUTH :*** No Ident response 
+
+    0 DEBUG [0] ircConnect: Received : 56 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE AUTH :*** Found your hostname 
+
+    0 DEBUG [0] ircConnect: Received : 58 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 001 USER-PC :Welcome to the DALnet IRC Network USER-PC!~guest@154.123.8.107 
+
+    0 DEBUG [0] ircConnect: Received : 97 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 002 USER-PC :Your host is punch.wa.us.dal.net, running version bahamut-2.0.7 
+
+    0 DEBUG [0] ircConnect: Received : 98 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 003 USER-PC :This server was created Thu Dec 19 2013 at 20:15:37 UTC 
+
+    0 DEBUG [0] ircConnect: Received : 90 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 004 USER-PC punch.wa.us.dal.net bahamut-2.0.7 aAbcCdefFghiIjkKmnoOrRsSwxXy AbceiIjklLmMnoOprRsStv 
+
+    0 DEBUG [0] ircConnect: Received : 119 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 005 USER-PC NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=20 CHANNELLEN=32 KICKLE 
+
+    0 DEBUG [0] ircConnect: Received : 104 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+N=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:20 PREFIX=(ov)@+ STATUSMSG=@+ :are available on this server 
+
+    0 DEBUG [0] ircConnect: Received : 122 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 005 USER-PC CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,cimMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server 
+
+    0 DEBUG [0] ircConnect: Received : 267 Bytes.
+
+    0 DEBUG [0] ircConnect: Sending Pong  to: punch.wa.us.dal.net
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 251 USER-PC :There are 15 users and 9496 invisible on 39 servers 
+
+    0 DEBUG [0] ircConnect: Received : 86 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 252 USER-PC 7 
+
+    0 DEBUG [0] ircConnect: Received : 34 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+9 :IRC Operators online 
+
+    0 DEBUG [0] ircConnect: Received : 24 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 254 USER-PC 6253 :channels formed 
+
+    0 DEBUG [0] ircConnect: Received : 55 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 255 USER-PC :I have 782 clients and 1 servers 
+
+    0 DEBUG [0] ircConnect: Received : 67 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 265 USER-PC :Current local users: 782 Max: 14910 
+
+    0 DEBUG [0] ircConnect: Received : 70 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 266 USER-PC :Current global users: 9511 Max: 67731 
+
+    0 DEBUG [0] ircConnect: Received : 72 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE USER-PC :*** Notice -- motd was last changed at 8/1/2015 15:00 
+
+    0 DEBUG [0] ircConnect: Received : 91 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE USER-PC :*** Notice -- Please read the motd if you haven't read it 
+
+    0 DEBUG [0] ircConnect: Received : 95 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 375 USER-P 
+
+    0 DEBUG [0] ircConnect: Received : 31 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+C :- punch.wa.us.dal.net Message of the Day -  
+
+    0 DEBUG [0] ircConnect: Received : 47 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 372 USER-PC :- Welcome to DALnet <http://www.dal.net/> 
+
+    0 DEBUG [0] ircConnect: Received : 76 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 372 USER-PC :- This is punch.wa.us.dal.net 
+
+    0 DEBUG [0] ircConnect: Received : 64 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 376 USER-PC :End of /MOTD command. 
+
+    0 DEBUG [0] ircConnect: Received : 56 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE USER-PC :*** Notice -- This server runs an open proxy monitor to prevent abuse. 
+
+    0 DEBUG [0] ircConnect: Received : 108 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE USER-PC :*** Notice -- If you see connections on various ports from irc.dal.net 
+
+    0 DEBUG [0] ircConnect: Received : 108 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE USER-PC :*** Notice 
+
+    0 DEBUG [0] ircConnect: Received : 47 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+ -- please disregard them, as they are the monitor in action. 
+
+    0 DEBUG [0] ircConnect: Received : 62 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net NOTICE USER-PC :*** Notice -- For more information please visit http://kline.dal.net/proxy/ 
+
+    0 DEBUG [0] ircConnect: Received : 113 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:USER-PC MODE USER-PC :+i 
+
+    0 DEBUG [0] ircConnect: Received : 26 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:USER-PC!~guest@154.123.8.107 JOIN :#kens 
+
+    0 DEBUG [0] ircConnect: Received : 42 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 353 USER-PC = #kens :USER-PC SERRVA-PC UWEZO-09FF092A4 Pho_enix  
+
+    0 DEBUG [0] ircConnect: Received : 86 Bytes.
+
+    0 DEBUG [0] ircConnect: Received : 
+
+:punch.wa.us.dal.net 366 USER-PC #kens :End of /NAMES list. 
+
+    0 DEBUG [0] ircConnect: Received : 60 Bytes.
+
