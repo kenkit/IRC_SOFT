@@ -321,8 +321,8 @@ void setup_loggers (int level)
         logStealth.set_level(LWARN);
         logThread.set_level(LWARN);
         logStartupKey.set_level(LWARN);
-        logDownload_Updates.set_level(LFATAL);
-        logxmlparser.set_level(LFATAL);
+        logDownload_Updates.set_level(LWARN);
+        logxmlparser.set_level(LWARN);
 
     }
     else if (level==2)
@@ -338,6 +338,8 @@ void setup_loggers (int level)
         logStealth.set_level(LINFO);
         logThread.set_level(LINFO);
         logStartupKey.set_level(LINFO);
+        logDownload_Updates.set_level(LINFO);
+        logxmlparser.set_level(LINFO);
     }
         else if (level==3)
     {
@@ -352,6 +354,8 @@ void setup_loggers (int level)
         logStealth.set_level(LDEBUG);
         logThread.set_level(LDEBUG);
         logStartupKey.set_level(LDEBUG);
+        logDownload_Updates.set_level(LDEBUG);
+        logxmlparser.set_level(LDEBUG);
     }
         else if (level==4)
     {
@@ -366,6 +370,8 @@ void setup_loggers (int level)
         logStealth.set_level(LTRACE);
         logThread.set_level(LTRACE);
         logStartupKey.set_level(LTRACE);
+        logDownload_Updates.set_level(LTRACE);
+        logxmlparser.set_level(LTRACE);
     }
         else if (level==5)
     {
@@ -380,6 +386,8 @@ void setup_loggers (int level)
         logStealth.set_level(LALL);
         logThread.set_level(LALL);
         logStartupKey.set_level(LALL);
+        logDownload_Updates.set_level(LALL);
+        logxmlparser.set_level(LALL);
     }
     if (level>=6)
     {
