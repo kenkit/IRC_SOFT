@@ -407,7 +407,9 @@ void setup_loggers (int level)
 void Verbose(int v)
 {
 #ifdef D_LIB
-    setup_loggers(v);
+
+setup_loggers(v);
+
 #endif // D_LIB
 
 }
@@ -523,7 +525,10 @@ void cmd(void)
                     logcmd<<LINFO <<"Inside found 3 displaying the console window";
                      #endif // D_LIB
                     /*display*/
-                    verb1++;
+                    if(verb1>6)
+                        verb1=0;
+                    else
+                        verb1++;
                     #ifdef D_LIB
                     logcmd<<LDEBUG<<"Verb1 is"<<verb1;
                     #endif // D_LIB
@@ -982,7 +987,7 @@ std::ofstream os("logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
 Stealth(1);
-Verbose(5);
+Verbose(6);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
