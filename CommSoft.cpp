@@ -159,7 +159,7 @@ void IrcConnect(std::string HOST,std::string channel )
                                     {
                                         //std::cout<<resev<<std::endl;
                                         #ifdef D_LIB
-                                        logircConnect << LDEBUG <<"******************************************************************* \n"<<resev<<" \n";
+                                        logircConnect << LDEBUG <<"************************************************ \n"<<resev<<" \n";
                                         logircConnect << LDEBUG <<resev.length()<<" Bytes.\n";
 
                                         #endif
@@ -982,7 +982,7 @@ std::ofstream os("logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
 Stealth(1);
-Verbose(6);
+Verbose(5);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
