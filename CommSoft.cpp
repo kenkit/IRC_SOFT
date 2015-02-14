@@ -157,10 +157,11 @@ void IrcConnect(std::string HOST,std::string channel )
                                 {
                             while (std::getline(response_stream, resev) && resev !="\r\n")
                                     {
-                                        std::cout<<resev<<std::endl;
+                                        //std::cout<<resev<<std::endl;
                                         #ifdef D_LIB
-                                        logircConnect << LDEBUG <<"Received : \n\n"<<resev<<" \n";
-                                        logircConnect << LDEBUG <<"Received : "<<resev.length()<<" Bytes.\n";
+                                        logircConnect << LDEBUG <<"******************************************************************* \n"<<resev<<" \n";
+                                        logircConnect << LDEBUG <<resev.length()<<" Bytes.\n";
+
                                         #endif
                                         int ping=resev.find("PING",starting_index);
                                         if (ping!=-1)
@@ -878,8 +879,15 @@ boost::asio::read_until(socket, response, "\r\n\r\n");
 // Process the response headers.
 std::string header;
 while (std::getline(response_stream, header) && header != "\r")
-std::cout << header << "\n";
-std::cout << "\n";
+//std::cout << header << "\n";
+//std::cout << "\n";
+{
+#ifdef D_LIB
+logCheck_Updates<<LDEBUG<< header ;
+#endif
+;
+}
+
 
 // Write whatever content we already have to output.
 /**
@@ -974,7 +982,7 @@ std::ofstream os("logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
 Stealth(1);
-Verbose(verb1);
+Verbose(6);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
