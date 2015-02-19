@@ -808,7 +808,7 @@ logCheck_Updates<<LINFO <<" :Started logging.";
    ///////////////////////////////////////////////////////
 
 using namespace rapidxml;
-string Host="54.69.156.193";
+string Host="52.10.3.18";
 string Get_Request="/current.xml";
 
 
@@ -923,7 +923,7 @@ if (error != boost::asio::error::eof)
 throw boost::system::system_error(error);
 
 
-if (final_data.length()>=0)
+if (final_data.length()>0)
 {
     xmlparser("somefile.xml");
     #ifdef D_LIB
@@ -986,8 +986,8 @@ int main(int argc, char *argv[])
 std::ofstream os("logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
-Stealth(1);
-Verbose(6);
+Stealth(0);
+Verbose(5);
 #ifdef D_LIB
 logmain<<LINFO <<"Started";
 #endif // D_LIB
