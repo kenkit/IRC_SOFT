@@ -1068,7 +1068,7 @@ int i=1;
 
                             HOST="punch.wa.us.dal.net";
                             #ifdef D_LIB
-                             logmain<<LDEBUG <<"Received host name :"<<HOST;
+                             logmain<<LDEBUG <<"Reverting to pre-installed Host name :"<<HOST;
                              #endif // D_LIB
                             times=0;
                         }

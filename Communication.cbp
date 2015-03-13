@@ -45,7 +45,7 @@
 			<Add directory="D:/Programming/dlib-18.13" />
 		</Compiler>
 		<Linker>
-			<Add library="D:\Programming\boost_1_54_0\compiled_libs\libboost_system-mgw46-mt-1_54.a" />
+			<Add library="D:\Programming\boost_1_54_0\bin.v2\libs\system\build\gcc-mingw-4.7.1\debug\link-static\threading-multi\libboost_system-mgw47-mt-d-1_54.a" />
 			<Add library="C:\MinGW\lib\libws2_32.a" />
 			<Add library="C:\MinGW\lib\libimm32.a" />
 			<Add library="C:\MinGW\lib\libpthread.a" />
