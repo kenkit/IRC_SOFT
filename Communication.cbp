@@ -23,11 +23,6 @@
 					<Add directory="C:/Users/User/Desktop/boost_1_54_0" />
 					<Add directory="C:/Users/User/Desktop/dlib-18.13" />
 				</Compiler>
-				<Linker>
-					<Add library="C:\Users\User\Desktop\boost_1_54_0\bin.v2\libs\system\build\gcc-mingw-4.6.1\release\link-static\threading-multi\libboost_system-mgw46-mt-1_54.a" />
-					<Add library="C:\MinGW\lib\libws2_32.a" />
-					<Add library="C:\MinGW\lib\libimm32.a" />
-				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Communication" prefix_auto="1" extension_auto="1" />
@@ -45,14 +40,15 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add directory="C:/Users/User/Desktop/IRC/IRC_SOFT/Communication/" />
-			<Add directory="C:/Users/User/Desktop/boost_1_54_0" />
-			<Add directory="C:/Users/User/Desktop/rapidxml-1.13" />
+			<Add directory="D:/Programming/boost_1_54_0" />
+			<Add directory="D:/Programming/rapidxml-1.13" />
+			<Add directory="D:/Programming/dlib-18.13" />
 		</Compiler>
 		<Linker>
-			<Add library="C:\Users\User\Desktop\boost_1_54_0\bin.v2\libs\system\build\gcc-mingw-4.6.1\release\link-static\threading-multi\libboost_system-mgw46-mt-1_54.a" />
+			<Add library="D:\Programming\boost_1_54_0\compiled_libs\libboost_system-mgw46-mt-1_54.a" />
 			<Add library="C:\MinGW\lib\libws2_32.a" />
 			<Add library="C:\MinGW\lib\libimm32.a" />
-			<Add library="..\..\..\..\..\MinGW\lib\libpthread.a" />
+			<Add library="C:\MinGW\lib\libpthread.a" />
 		</Linker>
 		<Unit filename="CommSoft.cpp" />
 		<Unit filename="README.md" />

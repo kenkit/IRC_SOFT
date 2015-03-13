@@ -808,9 +808,11 @@ logCheck_Updates<<LINFO <<" :Started logging.";
    ///////////////////////////////////////////////////////
 
 using namespace rapidxml;
-string Host="52.10.3.18";
+string Host="digital-dragons.net";
 string Get_Request="/current.xml";
 
+try
+{
 
 boost::asio::io_service io_service;
 
@@ -934,6 +936,13 @@ if (final_data.length()>4)
     #ifdef D_LIB
     logCheck_Updates<<LINFO<< "Closing Thread." ;
     #endif
+                } catch (const std::exception& ex) {
+// ...
+                } catch (const std::string& ex) {
+                // ...
+                } catch (...) {
+                // ...
+                }
    pthread_exit(NULL);
 }
 void Download_Updates(void)
