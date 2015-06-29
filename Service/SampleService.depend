@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1435332244 source:d:\programming\programming\random\sampleservice\sampleservicemain.cpp
+	<Windows.h>
+	<tchar.h>
+
