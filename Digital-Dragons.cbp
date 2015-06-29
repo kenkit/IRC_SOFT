@@ -2,30 +2,21 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Communication" />
+		<Option title="Digital-Dragons" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/Communication" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/Digital-Dragons" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add option="-D_WIN32_WINNT=0x0501" />
-					<Add option="-DD_LIB" />
-					<Add option="-DDLIB_NO_GUI_SUPPORT" />
-					<Add option="-DNO_MAKEFILE" />
-					<Add option="-DENABLE_ASSERTS" />
-					<Add option="-DNO_BOOST_DATE_TIME_INLINE" />
-					<Add directory="C:/Users/User/Desktop/IRC/IRC_SOFT/Communication/" />
-					<Add directory="C:/Users/User/Desktop/boost_1_54_0" />
-					<Add directory="C:/Users/User/Desktop/dlib-18.13" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/Communication" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/Digital-Dragons" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -39,19 +30,24 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
-			<Add directory="C:/Users/User/Desktop/IRC/IRC_SOFT/Communication/" />
+			<Add option="-DD_LIB" />
+			<Add option="-DDLIB_NO_GUI_SUPPORT" />
+			<Add option="-D_WIN32_WINNT=0x0501" />
+			<Add option="-DENABLE_ASSERTS" />
 			<Add directory="D:/Programming/boost_1_54_0" />
 			<Add directory="D:/Programming/rapidxml-1.13" />
 			<Add directory="D:/Programming/dlib-18.13" />
 		</Compiler>
 		<Linker>
-			<Add library="D:\Programming\boost_1_54_0\bin.v2\libs\system\build\gcc-mingw-4.7.1\debug\link-static\threading-multi\libboost_system-mgw47-mt-d-1_54.a" />
-			<Add library="C:\MinGW\lib\libws2_32.a" />
-			<Add library="C:\MinGW\lib\libimm32.a" />
+			<Add library="C:\Program Files\CodeBlocks\MinGW\lib\libws2_32.a" />
+			<Add library="C:\MinGW\lib\libgdi32.a" />
+			<Add library="C:\MinGW\lib\libcomctl32.a" />
+			<Add library="C:\MinGW\lib\libuser32.a" />
+			<Add library="C:\MinGW\lib\libwinmm.a" />
 			<Add library="C:\MinGW\lib\libpthread.a" />
+			<Add library="D:\Programming\boost_1_54_0\bin.v2\libs\system\build\gcc-mingw-4.6.1\release\link-static\threading-multi\libboost_system-mgw46-mt-1_54.a" />
 		</Linker>
 		<Unit filename="CommSoft.cpp" />
-		<Unit filename="README.md" />
 		<Extensions>
 			<code_completion />
 			<envvars />

